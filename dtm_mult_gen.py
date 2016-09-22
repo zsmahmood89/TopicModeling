@@ -322,7 +322,7 @@ final_result = working_df
 
 #Write out metafile
 final_result_meta = working_df[['index1','id','Full String','day','month','year','speaker',]]
-final_result_meta.to_csv('final_meta.csv',encoding='utf-8')
+final_result_meta.to_csv('final_meta.csv',encoding='utf-8',index=False)
 
 #Write out your datfile
 datfile=working_df[['Full String']]
@@ -330,7 +330,7 @@ datfile.to_csv('full-mult.dat',header=False,index=False)
 
 #Write out full dataframe, if applicable
 if write_teh_big_one==True:
-    final_result.to_csv(final_df_name, encoding='utf-8')
-    
-#This was here from before, not sure why but it looks important.
+    final_result.to_csv(final_df_name, encoding='utf-8',index=False)
+
+#Close your ref file; you're done appending it.
 ref_file.close()
