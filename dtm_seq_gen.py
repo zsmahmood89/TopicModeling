@@ -169,7 +169,7 @@ with open(infile,'rb') as f:
         if counter==0:
             if seq_meta==True:
                 addrow=['seqid']
-                header=[row[1],row[3],row[4],row[5]]
+                header=[row[1],row[3],row[4],row[5],row[6]]
                 finrow=header+addrow
                 writerow(finrow,outmeta,outpath,'w')
             counter+=1
