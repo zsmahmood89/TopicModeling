@@ -70,13 +70,15 @@ custom_clean=[]
 #    If True, you will need to define:
 #        (1) a text file with custom stopwords.
 #        (2) the directory of said file 
-#		 (3) whether to treat these as stems, too (e.g. remove "Israeli" if "Israel" in stopwords)
-#		 	Warning: very powerful. Be careful. Also, could add a lot of time. Default = False
+#		 (3) whether to treat these as "contains", too (e.g. remove "Israeli" if "Israel" in stopwords)
+#		 	Warning: very powerful. Be careful. Also, could add a lot of time. Default = False.
+#		 (4) a text file with any of your custom stopwords you DO NOT want to use as "contains". Place in "stoppath".
 #    Note: stopwords will NOT be case sensitive.
 custom_stopwords = False
 stoplist_file = ""
 stoppath = ""
 custom_stems = False
+stem_exclude = ""
     
 #########################
 #Input and output directories
@@ -232,7 +234,7 @@ def print_counter(a_counter, a_file):
         a_file.write(item.strip().replace("'", "") + '\n')
 
 # Converts a specified text file into a list of stopwords
-def custom_stopword_list(filename,location):
+def custom_list(filename,location):
     curdir=str(os.getcwd())
     os.chdir(location)
     with open(filename,'rb') as f:
@@ -269,7 +271,7 @@ if exclude_stopwords == True:
 	
 if custom_stopwords == True:
         stoplist_directory = stoppath
-        custom_stoplist=custom_stopword_list(stoplist_file,stoplist_directory)
+        custom_stoplist=custom_list(stoplist_file,stoplist_directory)
         w_blacklist += custom_stoplist
 
 counter_full = C_({}) 	# Counter of all words (or stems) and their counts in format Counter({value_of_word_in_word_dict_or_stemmed_dict: count, ...})
@@ -306,7 +308,12 @@ for index1, row in working_df.iterrows():
 
 	#Custom stoplist stemming
 	if custom_stopwords == True and custom_stems == True:
-		words_in_mc = clean_stems(custom_stoplist,words_in_mc)
+		if stem_exclude:
+			excl_list=custom_list(stem_exclude,stoplist_directory)
+		else:
+			excl_list=[]
+		custom_stemlist=[i for i in custom_stoplist if i not in excl_list]
+		words_in_mc = clean_stems(custom_stemlist,words_in_mc)
 
 	#Get wordcount
 	if stem_mc == True:	
