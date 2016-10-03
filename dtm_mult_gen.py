@@ -70,10 +70,13 @@ custom_clean=[]
 #    If True, you will need to define:
 #        (1) a text file with custom stopwords.
 #        (2) the directory of said file 
+#		 (3) whether to treat these as stems, too (e.g. remove "Israeli" if "Israel" in stopwords)
+#		 	Warning: very powerful. Be careful. Also, could add a lot of time. Default = False
 #    Note: stopwords will NOT be case sensitive.
 custom_stopwords = False
 stoplist_file = ""
 stoppath = ""
+custom_stems = False
     
 #########################
 #Input and output directories
@@ -151,6 +154,22 @@ def clean_list(blacklist,input_list):
 			for x in range(input_list.count(item)):
 				input_list.remove(item)
 	return input_list
+
+#Removes any words CONTAINING words in blacklist from input_list (e.g. removes "Israeli" if "Israel" is in blacklist)
+def clean_stems(blacklist,input_list):
+	zstr=" ".join(input_list)
+	blacklist_stems=[]
+	rm_words=[]
+	for item in blacklist:
+		zre=re.search(str(item),zstr,re.I)
+		if zre:
+			blacklist_stems.append(item)
+	for stem in blacklist_stems:
+		for word in input_list:
+			if stem.lower() in word.lower():
+				rm_words.append(word)
+	finlist=[item for item in input_list if item not in rm_words]
+	return(finlist)
 
 # Outputs file containing the wordlist with one word per row
 def list_to_file(Counter_in,path_str,file_name):
@@ -284,6 +303,10 @@ for index1, row in working_df.iterrows():
 	#Tokenize words
 	words_in_mc = tokenizer.tokenize(mem_cont)
 	words_in_mc = clean_list(w_blacklist, words_in_mc)
+
+	#Custom stoplist stemming
+	if custom_stopwords == True and custom_stems == True:
+		words_in_mc = clean_stems(custom_stoplist,words_in_mc)
 
 	#Get wordcount
 	if stem_mc == True:	
