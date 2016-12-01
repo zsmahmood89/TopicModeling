@@ -214,6 +214,13 @@ finlist.append(seqiddict[prevtuple])
 #Finish off the seq file
 ############
 finlist[0]=len(finlist)-1
+if sum(finlist)-(len(finlist)-1)!=counter-1:
+    print sum(finlist)-(len(finlist)-1)
+    print ""
+    print "Should be equal to"
+    print ""
+    print counter-1
+    sys.exit()
 outseq_csv=outseqbase+'.csv'
 for item in finlist:
     writerow([item],outseq_csv,outpath,'a')

@@ -114,7 +114,7 @@ def import_csvs(csvfile_list,indir):
         ed_df=my_temp_df[['id','year','month','day','speaker','speech']]
         list_.append(ed_df)
     frame=pandas.concat(list_)
-    final_frame=frame.sort('id',ascending=1)
+    final_frame=frame.sort(['year','month','day'],ascending=[1,1,1])
     return final_frame
         
 # tokenize all words into a list using the Porter Snowball Stemmer
