@@ -1,5 +1,5 @@
 ###########
-#Mult file generation for DTM
+#Mult file generation for DTM. Written for Python 3.
 #	Function() representation
 #	Adopted from Will Issac and James Murray.
 ###########
@@ -240,7 +240,7 @@ def pandasDF_to_mult(inputdf,outpath,custom_tokens=[],custom_clean=[],exclude_st
 	w_blacklist  = []			# List of words to remove
 	if exclude_stopwords == True:
 		w_blacklist += stopwords.words('english')
-	
+
 	#############
 	#Currently does not support custom stopword option
 	#############
@@ -264,18 +264,18 @@ def pandasDF_to_mult(inputdf,outpath,custom_tokens=[],custom_clean=[],exclude_st
 	#Begin iterating over rows
 	#######################################
 
-	print 'CHECKPOINT 2 - prep work complete'
+	print('CHECKPOINT 2 - prep work complete')
 
 	for index1, row in working_df.iterrows():
 		working_row = row.copy()
 		yr=working_row["year"]
-	    mem_cont_raw=str(working_row["speech"]).lower()
-	    
-	    #If there's custom stuff to remove, do it here
-	    for stuff_to_clean in custom_clean:
-	        mem_cont_raw=re.sub(str(stuff_to_clean),' ',mem_cont_raw)
-	    mem_cont=mem_cont_raw
-	        
+		mem_cont_raw=str(working_row["speech"]).lower()
+
+		#If there's custom stuff to remove, do it here
+		for stuff_to_clean in custom_clean:
+			mem_cont_raw=re.sub(str(stuff_to_clean),' ',mem_cont_raw)
+		mem_cont=mem_cont_raw
+		    
 		#Tokenize words
 		words_in_mc = tokenizer.tokenize(mem_cont)
 		words_in_mc = clean_list(w_blacklist, words_in_mc)
@@ -310,11 +310,11 @@ def pandasDF_to_mult(inputdf,outpath,custom_tokens=[],custom_clean=[],exclude_st
 
 		multi_index, multi_count = make_multi(counter_for_mc)
 		mc_str = make_multi_full(counter_for_mc)
-		
+
 		#Process the heck out of it
 		mc = pandas.Series(multi_count, index=multi_index, dtype = 'int')
 		mc_dict = mc.to_dict()
-		print 'Processing: '+ str(index1)
+		print('Processing: '+ str(index1))
 		mc_str = str(mc_str)
 		working_df.loc[index1,'Full String'] = mc_str       	           
 		w_mc.append(mc_dict)
