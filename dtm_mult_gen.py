@@ -44,9 +44,7 @@ nltk.download('stopwords')
 # User Options 
 ###################
 
-# If True, the member contribution will be stemmed.
-#   Truth be told, I'm not sure what this does. I leave it as it is, 
-#   but for the UN project I set it as False and I don't remember why.
+# If True, words in document will be stemmed using NLTK Snowball stemmer.
 stem_mc = False			# Default: True
 
 # If True, stopwords will be excluded.
@@ -295,12 +293,12 @@ for index1, row in working_df.iterrows():
 	working_row = row.copy()
 	yr=working_row["year"]
 	print str(yr)+'_'+str(working_row[0])
-        mem_cont_raw=str(working_row["speech"]).lower()
-        
-        #If there's custom stuff to remove, do it here
-        for stuff_to_clean in custom_clean:
-            mem_cont_raw=re.sub(str(stuff_to_clean),'',mem_cont_raw)
-        mem_cont=mem_cont_raw
+    mem_cont_raw=str(working_row["speech"]).lower()
+    
+    #If there's custom stuff to remove, do it here
+    for stuff_to_clean in custom_clean:
+        mem_cont_raw=re.sub(str(stuff_to_clean),' ',mem_cont_raw)
+    mem_cont=mem_cont_raw
         
 	#Tokenize words
 	words_in_mc = tokenizer.tokenize(mem_cont)
